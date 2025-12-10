@@ -1,0 +1,2 @@
+https://azuredemoavsk.blob.core.windows.net/azuredemoavsk-images?restype=container&comp=list
+https://localhost:7242/container/index
