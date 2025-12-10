@@ -77,6 +77,23 @@ public class BlobService : IBlobService
         var blobs = blobContainerClient.GetBlobsAsync();
 
         List<BlobModel> blobList = new List<BlobModel>();
+        string sasContainerSignature="";
+
+
+        //Generating SAS token from here on container level
+        if (blobContainerClient.CanGenerateSasUri)
+        {
+            BlobSasBuilder blobSasBuilder = new BlobSasBuilder()
+            {
+                BlobContainerName =blobContainerClient.Name,
+                Resource = "c",
+                ExpiresOn = DateTimeOffset.UtcNow.AddHours(1)
+            };
+            blobSasBuilder.SetPermissions(BlobSasPermissions.Read);
+            sasContainerSignature= blobContainerClient.GenerateSasUri(blobSasBuilder).AbsoluteUri.Split('?')[1].ToString();
+        }
+
+
 
         await foreach (var blob in blobs)
         {
@@ -84,8 +101,23 @@ public class BlobService : IBlobService
 
             BlobModel blobModel = new()
             {
-                Uri = blobClient.Uri.AbsoluteUri
+                Uri = blobClient.Uri.AbsoluteUri +"?" + sasContainerSignature
             };
+
+            //Generating SAS token from here one each blob item
+            //if (blobClient.CanGenerateSasUri)
+            //{
+            //    BlobSasBuilder blobSasBuilder = new BlobSasBuilder()
+            //    {
+            //        BlobContainerName = blobClient.GetParentBlobContainerClient().Name,
+            //        BlobName = blob.Name,
+            //        Resource = "b",
+            //        ExpiresOn = DateTimeOffset.UtcNow.AddHours(1)
+            //    };
+            //    blobSasBuilder.SetPermissions(BlobSasPermissions.Read);
+            //    blobModel.Uri = blobClient.GenerateSasUri(blobSasBuilder).AbsoluteUri;
+            //}
+
             BlobProperties properties = await blobClient.GetPropertiesAsync();
             if (properties.Metadata.ContainsKey("title"))
             {
