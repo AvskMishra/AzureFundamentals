@@ -1,4 +1,4 @@
-﻿
+﻿ 
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 
@@ -49,8 +49,10 @@ public class Containerservice : IContainerService
                 //get metadata
 
                 var blobClient = _blobContainer.GetBlobClient(blobItem.Name);
+                //to fetch metadata we need to get blob properties
                 BlobProperties blobProperties = await blobClient.GetPropertiesAsync();
                 string tempBlobToAdd = blobItem.Name;
+                //data will be in key value pair like dictionary
                 if (blobProperties.Metadata.ContainsKey("title"))
                 {
                     tempBlobToAdd += "(" + blobProperties.Metadata["title"] + ")";
