@@ -1,3 +1,7 @@
 <Solution>
+  <Folder Name="/AzureFunctionExample/">
+    <Project Path="AzureFuncitonExample/AzureFuncitonExample.csproj" Id="daebc77f-e850-4a7e-8fbe-979ee3b43741" />
+    <Project Path="AzureFunctionProject/AzureFunctionProject.csproj" Id="51390b5a-7fd7-4240-9097-2323b5b69d3f" />
+  </Folder>
   <Project Path="AzureBlobProject/AzureBlobProject.csproj" />
 </Solution>
